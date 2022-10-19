@@ -22,14 +22,13 @@ actions = ActionChains(driver)
 # driver = webdriver.Chrome()
 
 item = 4907953221833
-# item = 4549660863472
+# item = 4582662913660
 url = f"https://chiikawamarket.jp/collections/newitems/products/{item}"
 driver.set_window_size(1024 , 800)
 driver.get(url)
 
 
 input("wait for Worldship Close")
-# driver.find_element(By.CSS_SELECTOR, '[class="src-components-utils-___ModalHeader__close___GR17n"]').click()
 login = driver.find_element(By.CSS_SELECTOR, '[alt="ログイン"]')
 login.click()
 time.sleep(1)
@@ -37,21 +36,49 @@ time.sleep(1)
 email = driver.find_element(By.CSS_SELECTOR, '[type="email"]')
 password = driver.find_element(By.CSS_SELECTOR, '[type="password"]')
 submit = driver.find_element(By.CSS_SELECTOR, '[value="ログイン"]')
-email.send_keys("sorafung624@gmail.com")
+email.send_keys("sorathai624@gmail.com")
 password.send_keys("test1234")
 submit.click()
 
 
 driver.get(url)
-cart = driver.find_element(By.CSS_SELECTOR, '[class="product-form--text"]')
+# cart = driver.find_element(By.CSS_SELECTOR, '[class="product-form--text"]')
 
-###### loop
-input("loop start")
+
+###### if no id - loop ######
+# driver.get("https://chiikawamarket.jp/")
+# while True:
+#     try:
+#         for i in range(12):
+#             # if "フェイスタオル2P BL（アイス）" in driver.find_element(By.XPATH, "//div[contains(@class, 'item_box')]/h3/a").text:
+#             if "123123" in driver.find_element(By.XPATH, f"//div[contains(@class, 'item_box')][{i+1}]/h3/a").text:
+#                 print("a", i+1)
+#                 driver.find_element(By.XPATH, f"//div[contains(@class, 'item_box')][{i+1}]/h3/a").click()
+#                 break
+#             else:
+#                 print("搵緊", i+1)
+#
+#         if "products" in driver.current_url:
+#             print("done")
+#             break
+#     except Exception:
+#         driver.refresh()
+#         time.sleep(0.5)
+#         print("888")
+#
+#     print("未有要refresh")
+#     driver.refresh()
+#     time.sleep(0.5)
+#
+
+###### loop ######
+# input("loop start")
+driver.get(url)
 while True:
     cart = driver.find_element(By.CSS_SELECTOR, '[class="product-form--text"]')
 
     if "カートに入れる" in cart.text:
-        print("123156")
+        print("入咗車")
         cart.click()
         WebDriverWait(driver, 30).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, '[class="cart--title"]')))
@@ -61,7 +88,7 @@ while True:
     else:
         driver.refresh()
         time.sleep(0.5)
-        print("777")
+        print("未買得要refresh")
 
 
 ###### payment ########
@@ -92,6 +119,7 @@ actions.perform()
 driver.find_element(By.XPATH, "//*[contains(@class, 'field__input field__input--iframe-container') and contains(@data-card-field-placeholder, 'セキュリティコード')]").click()
 actions.send_keys('123')
 actions.perform()
+print("等你俾錢")
 
 # driver.find_element(By.CSS_SELECTOR, '[class="input-checkbox"]').click()
 # driver.find_element(By.CSS_SELECTOR, '[class="step__footer__continue-btn btn"]')
