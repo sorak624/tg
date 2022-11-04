@@ -16,7 +16,7 @@ updater = Updater(token=TOKEN)
 bot = telegram.Bot(token=TOKEN)
 dispatcher = updater.dispatcher
 
-list = ['101', '姐姐', '串燒', '光榮', '小魚', '0192731904608563564028409147109147']
+list = ['101', '姐姐', '串燒', '光榮', '小魚','嘉寶',      '0192731904608563564028409147109147']
 sam = ['sam', 'ken', 'Ken', 'Sam']
 
 with open("./data/blacklist.txt", encoding="utf-8") as f:
@@ -45,7 +45,7 @@ def start(update, context):
             InlineKeyboardButton('Testlink', url = 'http://192.168.21.53:81/testlink/index.php'),
             InlineKeyboardButton('APP dev', url='http://192.168.17.77:88/d20/')],
             [InlineKeyboardButton('figma', url = 'https://www.figma.com/file/4dgOlg3ihsSEbXTIWAigO0/APP-V3-Sport---DEMO-(6)-2022-06-09?node-id=11893%3A63030'),
-            InlineKeyboardButton('App Req. Spec', url = 'https://docs.google.com/presentation/d/1_j2fdOh6a_GzFrYxOQrMwFpCCF0bGMMSxjKfZ0uTFOw/edit#slide=id.g137eb4812c8_1_9'),
+            InlineKeyboardButton('App Download　URL', url = 'https://web01.app-store-update.com/v2android/mobileV3/download_mobilev3.html'),
             InlineKeyboardButton('App Wallet Spec', url = 'https://docs.google.com/presentation/d/1TJu7oNb_Q6YJ-cHvCN7PGSIWR2y2eq7nJB1ImtWV11M/edit#slide=id.g13ac2ba377b_1_69')],
             [InlineKeyboardButton('Jenkins CDAV4', callback_data = '5'),InlineKeyboardButton('Phone rule', callback_data = '7')],
             [InlineKeyboardButton('Zeplin', callback_data = '8')]

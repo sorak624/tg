@@ -11,12 +11,12 @@ with open('token.txt', 'r') as f:
 
 updater = Updater(token=TOKEN)
 dispatcher = updater.dispatcher
-
-list = ['å§�å§�', 'ä¸²ç‡’', '101', 'é­šç”Ÿ', 'å˜‰å¯¶', 'å…‰æ¦®', 'å°�é­š', 'é�µç‰›']
+bot = telegram.Bot(token=TOKEN)
+list = ['101', '姐姐', '串燒', '光榮', '小魚', '嘉寶', '0192731904608563564028409147109147']
 
 def eat():
     food = random.choice(list)
-    bot = telegram.Bot(token=TOKEN)
+    # bot = telegram.Bot(token=TOKEN)
     bot.send_message('-1001757236183', text='Today eat what ho?')
     time.sleep(1)
     bot.send_message('-1001757236183', text=food)
@@ -24,12 +24,16 @@ def eat():
     bot.send_message('-1001757236183', text='Click /here redraw')
     list.remove(food)
 
+def test():
+    bot.send_message('-1001757236183', text='book chiikawawawawawawaw!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 schedule.every().monday.at("11:59").do(eat)
 schedule.every().tuesday.at("11:59").do(eat)
 schedule.every().wednesday.at("11:59").do(eat)
 schedule.every().thursday.at("11:59").do(eat)
 schedule.every().friday.at("11:59").do(eat)
+
+schedule.every().friday.at("16:45").do(test)
 
 
 while True:

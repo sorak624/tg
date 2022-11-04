@@ -39,7 +39,7 @@ def start(update, context):
             InlineKeyboardButton('Testlink', url = 'http://192.168.21.53:81/testlink/index.php'),
             InlineKeyboardButton('FlyVPN', callback_data = '6')],
             [InlineKeyboardButton('CGP & GAO PAO', callback_data = '4'),
-            InlineKeyboardButton('App Req. Spec', url = 'https://docs.google.com/presentation/d/1_j2fdOh6a_GzFrYxOQrMwFpCCF0bGMMSxjKfZ0uTFOw/edit#slide=id.g137eb4812c8_1_9'),
+            InlineKeyboardButton('App Download　URL', url = 'https://web01.app-store-update.com/v2android/mobileV3/download_mobilev3.html'),
             InlineKeyboardButton('Jenkins CDAV4 account', callback_data = '5')],
             [InlineKeyboardButton('Phone rule', callback_data = '7'), InlineKeyboardButton('Zeplin', callback_data = '8')]
         ]))
