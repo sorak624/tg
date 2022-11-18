@@ -41,7 +41,7 @@ class Main:
         password = driver.find_element(By.CSS_SELECTOR, '[type="password"]')
         submit = driver.find_element(By.CSS_SELECTOR, '[value="ログイン"]')
         email.send_keys("sora624@hotmail.com.hk")
-        password.send_keys("Fca830a1")
+        password.send_keys("test1234")
         submit.click()
 
 

@@ -16,30 +16,13 @@ updater = Updater(token=TOKEN)
 bot = telegram.Bot(token=TOKEN)
 dispatcher = updater.dispatcher
 
-with open("./data/blacklist.txt", encoding="utf-8") as f:
-    bl = f.read()
-
-with open("./data/wifi.txt", encoding="utf-8") as f:
-    wf = f.read()
-
-with open("./data/crypto.txt", encoding="utf-8") as f:
-    ct = f.read()
-
-with open("./data/cgp.txt", encoding="utf-8") as f:
-    cgp = f.read()
-
-
 def start(update, context):
     update.message.reply_text('What do you want arr?',
         reply_markup = InlineKeyboardMarkup([
-            [InlineKeyboardButton('Blacklist', callback_data = '1'),
-            InlineKeyboardButton('Wifi', callback_data = '2'),
-            InlineKeyboardButton('Crypto path', callback_data='3')],
             [InlineKeyboardButton('Animation Panel', url = 'http://18.163.158.97:81/inplay/football'),
             InlineKeyboardButton('Testlink', url = 'http://192.168.21.53:81/testlink/index.php'),
             InlineKeyboardButton('FlyVPN', callback_data = '6')],
-            [InlineKeyboardButton('CGP & GAO PAO', callback_data = '4'),
-            InlineKeyboardButton('App Download　URL', url = 'https://web01.app-store-update.com/v2android/mobileV3/download_mobilev3.html'),
+            [InlineKeyboardButton('App Download　URL', url = 'https://web01.app-store-update.com/v2android/mobileV3/download_mobilev3.html'),
             InlineKeyboardButton('Jenkins CDAV4 account', callback_data = '5')],
             [InlineKeyboardButton('Phone rule', callback_data = '7'), InlineKeyboardButton('Zeplin', callback_data = '8')]
         ]))
@@ -48,15 +31,7 @@ def start(update, context):
 def answer(update, context):
     query = update.callback_query.data
 
-    if '1' in query:
-        update.callback_query.edit_message_text(bl)
-    elif '2' in query:
-        update.callback_query.edit_message_text(wf)
-    elif '3' in query:
-        update.callback_query.edit_message_text(ct)
-    elif '4' in query:
-        update.callback_query.edit_message_text(cgp)
-    elif '5' in query:
+    if '5' in query:
         update.callback_query.edit_message_text('qa\n2Eu*_/P97>d+y29[')
     elif '6' in query:
         update.callback_query.edit_message_text('slouiselen@gmail.com\n5wDBmvyeXfgb6t2')

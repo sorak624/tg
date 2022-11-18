@@ -19,14 +19,6 @@ dispatcher = updater.dispatcher
 list = ['101', '姐姐', '串燒', '光榮', '小魚','嘉寶',      '0192731904608563564028409147109147']
 sam = ['sam', 'ken', 'Ken', 'Sam']
 
-with open("./data/blacklist.txt", encoding="utf-8") as f:
-    bl = f.read()
-
-with open("./data/wifi.txt", encoding="utf-8") as f:
-    wf = f.read()
-
-with open("./data/crypto.txt", encoding="utf-8") as f:
-    ct = f.read()
 
 def again(update, context):
     update.message.reply_text("今日食咩好????", reply_markup = InlineKeyboardMarkup([[
@@ -38,9 +30,6 @@ def again(update, context):
 def start(update, context):
     update.message.reply_text('What do you want arr?',
         reply_markup = InlineKeyboardMarkup([
-            [InlineKeyboardButton('blacklist', callback_data = '1'),
-            InlineKeyboardButton('wifi', callback_data = '2'),
-            InlineKeyboardButton('crypto', callback_data='3')],
             [InlineKeyboardButton('live', url = 'http://18.163.158.97:81/inplay/football'),
             InlineKeyboardButton('Testlink', url = 'http://192.168.21.53:81/testlink/index.php'),
             InlineKeyboardButton('APP dev', url='http://192.168.17.77:88/d20/')],
@@ -55,13 +44,7 @@ def start(update, context):
 def answer(update, context):
     query = update.callback_query.data
 
-    if '1' in query:
-        update.callback_query.edit_message_text(bl)
-    elif '2' in query:
-        update.callback_query.edit_message_text(wf)
-    elif '3' in query:
-        update.callback_query.edit_message_text(ct)
-    elif 'food' in query:
+    if 'food' in query:
         food = random.choice(list)
         n = random.randint(1, 10)
         n = str(n)
