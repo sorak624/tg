@@ -1,6 +1,7 @@
 import time
 import os
 import sys
+import json
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import WebDriverException
@@ -9,6 +10,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 import requests
+from chiikawa import chiikawaPlugins
+
+def get_config_dict():
+    config_json_filename = 'settings.json'
+    app_root = get_app_root()
+    config_filepath = os.path.join(app_root, config_json_filename)
+    config_dict = None
+    if os.path.isfile(config_filepath):
+        with open(config_filepath) as json_data:
+            config_dict = json.load(json_data)
+    return config_dict
+
 
 def get_app_root():
     # 讀取檔案裡的參數值
@@ -25,17 +38,19 @@ def get_favoriate_extension_path(webdriver_path):
     no_ad_path = os.path.join(webdriver_path,"Adblock_3.14.2.0.crx")
     return no_google_analytics_path, no_ad_path
 
-def get_driver_by_config(driver_type):
-    homepage = "https://ticketing.galaxymacau.com/shows/show.aspx?sh=YGTTEV"
+def get_driver_by_config(homepage, driver_type):
 
     Root_Dir = get_app_root()
     webdriver_path = os.path.join(Root_Dir, "webdriver")
-    adblock_plus_enable = True
+    adblock_plus_enable = False
     print("adblock_plus_enable:", adblock_plus_enable)
     if driver_type != "uc":
         driver = load_chromdriver_normal(webdriver_path, driver_type, adblock_plus_enable)
     else:
         driver = load_chromdriver_uc(webdriver_path, adblock_plus_enable)
+
+    driver.execute_cdp_cmd('Network.setBlockedURLs', {"urls": ["https://checkout-api.worldshopping.jp"]})
+    driver.execute_cdp_cmd('Network.enable', {})
 
     if driver is None:
         print("create web driver object fail @_@;")
@@ -66,7 +81,7 @@ def get_driver_by_config(driver_type):
 def load_chromdriver_normal(webdriver_path, driver_type, adblock_plus_enable):
     chrome_options = webdriver.ChromeOptions()
 
-    chromedriver_path = os.path.join(webdriver_path,"chromedriver.exe")
+    chromedriver_path = os.path.join(webdriver_path,"./chromedriver.exe")
 
 
     # some windows cause: timed out receiving message from renderer
@@ -89,7 +104,7 @@ def load_chromdriver_normal(webdriver_path, driver_type, adblock_plus_enable):
     # for navigator.webdriver
     chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
     chrome_options.add_experimental_option('useAutomationExtension', False)
-    chrome_options.add_experimental_option("prefs", {"credentials_enable_service": False, "profile.password_manager_enabled": False})
+    chrome_options.add_experimental_option("prefs", {"credentials_enable_service": False, "profile.password_manager_enabled": False, "profile.managed_default_content_settings.images": 2})
 
     #caps = DesiredCapabilities().CHROME
     caps = chrome_options.to_capabilities()
@@ -152,7 +167,10 @@ def load_chromdriver_uc(webdriver_path, adblock_plus_enable):
     options.add_argument('--lang=zh-TW')
 
     options.add_argument("--password-store=basic")
-    options.add_experimental_option("prefs", {"credentials_enable_service": False, "profile.password_manager_enabled": False})
+    prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False, "profile.managed_default_content_settings.images": 2, "javascript.enabled": False}
+
+    options.add_experimental_option("prefs", prefs)
+
 
     caps = options.to_capabilities()
     caps["unhandledPromptBehavior"] = u"accept"
@@ -195,47 +213,17 @@ def load_chromdriver_uc(webdriver_path, adblock_plus_enable):
 
     return driver
 
-def galaxy_main(driver, url):
-    # ignore url redirect
-    # https://ticketing.galaxymacau.com/shows/show.aspx?sh=YGTTEV
-    # if '/shows' in url:
-    #     return
-
-    try:
-        window_handles_count = len(driver.window_handles)
-        if window_handles_count > 1:
-            driver.switch_to.window(driver.window_handles[0])
-            driver.close()
-            driver.switch_to.window(driver.window_handles[0])
-    except Exception as excSwithFail:
-        pass
-
-    # if '/eventDetail?' in url:
-    #     is_modal_dialog_popup = check_modal_dialog_popup(driver)
-    #     if is_modal_dialog_popup:
-    #         print("is_modal_dialog_popup! skip...")
-    #     else:
-    #         date_auto_select_enable = config_dict["tixcraft"]["date_auto_select"]["enable"]
-    #         if date_auto_select_enable:
-    #             cityline_purchase_button_press(driver, config_dict)
-    #
-    # if '/performance?' in url:
-    #     is_modal_dialog_popup = check_modal_dialog_popup(driver)
-    #     if is_modal_dialog_popup:
-    #         print("is_modal_dialog_popup! skip...")
-    #     else:
-    #         area_auto_select_enable = config_dict["tixcraft"]["area_auto_select"]["enable"]
-    #         if area_auto_select_enable:
-    #             cityline_performance(driver, config_dict)
-
 def main():
+    config_dict = get_config_dict()
 
-    driver = None
-    driver = get_driver_by_config(driver_type="uc")
+    homepage = "https://chiikawamarket.jp"
+    driver = get_driver_by_config(homepage=homepage, driver_type="uc")
+    driver.set_page_load_timeout(1)
+    # driver.execute_script("var element = document.createElement('style'); element.innerHTML ='img { display: none!important; }'; document.body.appendChild(element);")
     last_url = ""
 
     while True:
-        time.sleep(0.1)
+        time.sleep(0.2)
 
         if driver is None:
             print("web driver not accessible!")
@@ -247,8 +235,6 @@ def main():
         try:
             url = driver.current_url
         except NoSuchWindowException:
-            # print('NoSuchWindowException at this url:', url )
-            # print("last_url:", last_url)
             try:
                 window_handles_count = len(driver.window_handles)
                 if window_handles_count > 1:
@@ -325,10 +311,15 @@ def main():
         else:
             if len(url) == 0:
                 continue
+        try:
+            if 'chiikawamarket.jp' in url\
+                    or 'https://nagano-market.jp/' in url:
+                chiikawaPlugins.chii_Main(driver, url, homepage)
+        except Exception:
+            time.sleep(0.5)
+            print("1")
 
-        if 'galaxymacau.com' in url:
-            galaxy_main(driver, url)
-        # print(driver.current_url)
+
 
 if __name__ == "__main__":
     main()
